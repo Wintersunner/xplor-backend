@@ -28,10 +28,13 @@ jobs:
       - name: Build
         run: make build
 
-      - name: Install sshpass
-        run: sudo apt install sshpass -y
-
-      - name: SCP Build to Server
-        run: sshpass -p "${{ secrets.PASSWORD }}" scp -o StrictHostKeyChecking=no -P ${{ secrets.PORT }} -r ./main ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~
-      - name: SCP Migration files
-        run: sshpass -p "${{ secrets.PASSWORD }}" scp -o StrictHostKeyChecking=no -P ${{ secrets.PORT }} -r ./db/migration ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/db/migration
+      - name: Deploy to Server
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --delete --include="main" --include="db" --include="db/migration" --exclude="db/*" --exclude="*"
+          path: .
+          remote_path: /home/arman
+          remote_host: ${{ secrets.HOST }}
+          remote_port: ${{ secrets.PORT }}
+          remote_user: ${{ secrets.USERNAME }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
