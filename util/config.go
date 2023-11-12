@@ -26,6 +26,7 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.SetConfigType("env")
 	viper.SetDefault("ALLOWED_ORIGINS", "*")
 	viper.SetDefault("GIN_MODE", "release")
+	viper.SetDefault("DB_DRIVER", "mysql")
 	viper.AutomaticEnv()
 	err = viper.ReadInConfig()
 	if err != nil {
