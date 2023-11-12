@@ -1,0 +1,40 @@
+name: Build and Deploy on Production
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      DB_DRIVER: mysql
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: localhost
+      DB_PORT: 3306
+      ALLOWED_ORIGINS: "https://armans.ca"
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ^1.21
+        id: go
+
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Create empty env file
+        run: touch app.env
+
+      - name: Build
+        run: make build
+
+      - name: Install sshpass
+        run: sudo apt install sshpass -y
+
+      - name: SCP Build to Server
+        run: sshpass -p "${{ secrets.PASSWORD }}" scp -o StrictHostKeyChecking=no -P ${{ secrets.PORT }} -r ./main ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~
