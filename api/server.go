@@ -45,7 +45,7 @@ func (server *Server) setupRouter() {
 
 	router.NoRoute(func(context *gin.Context) {
 		context.JSON(http.StatusNotFound, gin.H{
-			"error": "not found",
+			"error": "404 not found",
 		})
 	})
 

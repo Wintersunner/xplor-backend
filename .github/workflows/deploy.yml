@@ -8,14 +8,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    env:
-      DB_DRIVER: mysql
-      DB_NAME: ${{ secrets.DB_NAME }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_HOST: localhost
-      DB_PORT: 3306
-      ALLOWED_ORIGINS: "https://armans.ca"
 
     steps:
       - name: Set up Go
