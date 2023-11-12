@@ -38,3 +38,5 @@ jobs:
 
       - name: SCP Build to Server
         run: sshpass -p "${{ secrets.PASSWORD }}" scp -o StrictHostKeyChecking=no -P ${{ secrets.PORT }} -r ./main ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~
+      - name: SCP Migration files
+        run: sshpass -p "${{ secrets.PASSWORD }}" scp -o StrictHostKeyChecking=no -P ${{ secrets.PORT }} -r ./db/migration ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/db/migration

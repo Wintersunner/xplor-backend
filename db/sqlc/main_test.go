@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/Wintersunner/xplor/util"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
@@ -17,7 +16,6 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal("Cannot load test config file: ", err)
 	}
-	fmt.Println(config)
 	conn, err := sql.Open(config.DBDriver, config.DBSource())
 	if err != nil {
 		log.Fatal("Cannot connect to test database: ", err)

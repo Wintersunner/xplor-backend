@@ -36,18 +36,17 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.SetDefault("DB_PORT", "3306")
 	viper.SetDefault("ALLOWED_ORIGINS", "3306")
 	viper.AutomaticEnv()
-	err = viper.ReadInConfig()
-	if err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Fatal("config file not found using os env variables")
+	er := viper.ReadInConfig()
+	if er != nil {
+		if _, ok := er.(viper.ConfigFileNotFoundError); ok {
+			log.Println("config file not found using os env variables")
 		} else {
-			log.Fatal("error loading config file", err)
+			log.Fatal("error loading config file", er)
 			return
 		}
 	}
 
 	err = viper.Unmarshal(&config)
-	fmt.Println(config)
 	return
 }
 
