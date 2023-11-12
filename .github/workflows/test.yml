@@ -1,0 +1,55 @@
+name: Run unit tests
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      DB_DRIVER: mysql
+      DB_NAME: xplor
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      DB_HOST: localhost
+      DB_PORT: 3306
+
+    services:
+      mysql:
+        image: mysql:8.2
+        env:
+          MYSQL_DATABASE: xplor
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: root_password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.21
+        id: go
+
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Create empty env file
+        run: touch app.env
+
+      - name: Install golang-migrate
+        run: |
+          curl -L https://github.com/golang-migrate/migrate/releases/download/v4.14.1/migrate.linux-amd64.tar.gz | tar xvz
+          sudo mv migrate.linux-amd64 /usr/bin/migrate
+          which migrate
+
+      - name: Run migrations
+        run: make migrate
+
+      - name: Test
+        run: make test
