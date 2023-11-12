@@ -31,7 +31,7 @@ jobs:
       - name: Deploy to Server
         uses: burnett01/rsync-deployments@6.0.0
         with:
-          switches: -avzr --delete --include="main" --include="db" --include="db/migration" --exclude="db/*" --exclude="*"
+          switches: -avzr --delete --include="main" --include="db" --include="db/migration" --include="db/migration/**" --exclude="db/*" --exclude="*"
           path: .
           remote_path: /home/arman
           remote_host: ${{ secrets.HOST }}
