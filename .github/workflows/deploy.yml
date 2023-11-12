@@ -1,8 +1,11 @@
 name: Build and Deploy on Production
 
 on:
-  push:
+  workflow_run:
+    workflows: [ Run unit tests ]
     branches: [ master ]
+    types:
+      - completed
 
 jobs:
   build:
